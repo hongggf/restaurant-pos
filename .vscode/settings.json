@@ -1,0 +1,23 @@
+{
+  "postgres.connections": [
+    {
+      "label": "restaurant_pos",
+      "host": "localhost",
+      "user": "pos_user",
+      "password": "Vong@1234",
+      "port": 5435,
+      "database": "restaurant_pos"
+    }
+  ],
+  "sqltools.connections": [
+    {
+      "name": "restaurant_pos",
+      "driver": "PostgreSQL",
+      "server": "localhost",
+      "port": 5435,
+      "database": "restaurant_pos",
+      "username": "pos_user",
+      "password": "Vong@1234"
+    }
+  ]
+}

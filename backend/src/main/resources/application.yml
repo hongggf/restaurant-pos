@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: restaurant-pos
+  datasource:
+    url: jdbc:postgresql://localhost:5432/restaurant_pos
+    username: pos_user
+    password: pos_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    # Dev-only default. In production, set JWT_SECRET in the environment —
+    # the app must not run with this placeholder value.
+    secret: ${JWT_SECRET:your-256-bit-secret-key-here-change-in-production}
+    expiration-ms: 86400000          # 24 hours (staff tokens)
+    guest-expiration-ms: 14400000    # 4 hours (QR-table guest tokens)
+  upload:
+    dir: ${UPLOAD_DIR:uploads}
+  session:
+    idle-timeout: PT4H               # auto-close ACTIVE table sessions idle this long
+    cleanup-interval-ms: 900000      # stale-session sweep every 15 minutes
+  tax:
+    # VAT applied to guest carts; moves to system settings in Phase 11
+    rate: ${TAX_RATE:0.10}
+  restaurant:
+    # Shown on receipts; moves to system settings in Phase 11
+    name: ${RESTAURANT_NAME:Malantang Restaurant}
+  admin:
+    # First-boot admin account (see AdminSeeder). Dev-only defaults below —
+    # in production, set ADMIN_USERNAME/ADMIN_EMAIL/ADMIN_PASSWORD in the environment.
+    username: ${ADMIN_USERNAME:admin}
+    email: ${ADMIN_EMAIL:admin@restaurant-pos.local}
+    password: ${ADMIN_PASSWORD:Admin@123}
+  cors:
+    # Comma-separated origin patterns. Dev-only defaults below —
+    # in production, set CORS_ALLOWED_ORIGINS in the environment (e.g. https://malatang.com).
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:*,http://127.0.0.1:*}

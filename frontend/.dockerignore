@@ -1,0 +1,8 @@
+node_modules/
+dist/
+food-images-src/
+.git/
+.gitignore
+.env*
+scripts/
+*.md

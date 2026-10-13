@@ -1,0 +1,8 @@
+target/
+*.log
+uploads/
+.git/
+.gitignore
+.env*
+docs/
+scripts/

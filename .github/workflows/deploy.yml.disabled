@@ -1,0 +1,48 @@
+name: Deploy to Ubuntu
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # workflow_run fires on completion whatever the outcome, so a failing CI
+    # run would deploy without this.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
+
+    steps:
+      - name: Report what triggered this deploy
+        run: |
+          echo "event:      ${{ github.event_name }}"
+          echo "CI run:     ${{ github.event.workflow_run.html_url }}"
+          echo "conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "commit:     ${{ github.event.workflow_run.head_sha }}"
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+
+          script: |
+            cd ~/resturant
+            git pull origin main
+            docker compose up -d --build
+            docker image prune -f
