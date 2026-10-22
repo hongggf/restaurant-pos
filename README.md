@@ -314,6 +314,30 @@ Configuration is managed via the root `.env` file:
 - **Deploying Updates**: Because the host is a roaming laptop, the old GitHub Actions automated SSH deployment has been disabled. To deploy new code, simply pull the latest `main` branch on the host machine and run `docker compose up -d --build`.
 - **Database Port**: The PostgreSQL database exposes port `5435` instead of the default `5432` to intentionally prevent collisions with other local AI and microservice projects running on the same laptop.
 
+### 📱 Connecting from Phones / Remote Devices
+
+#### Option A: Quick Tunnel (Online — Any Wi-Fi or 4G/5G Cellular Data)
+To access the website from your phone across different Wi-Fi networks or mobile data:
+```bash
+./run-tunnel.sh
+```
+* Generates a public HTTPS `trycloudflare.com` URL.
+* Displays a terminal QR code to scan directly with your phone camera.
+* Check status anytime: `./run-tunnel.sh status`
+* Stop tunnel: `./run-tunnel.sh stop`
+
+#### Option B: Offline Wi-Fi Hotspot (Completely Offline — Wi-Fi Down / No Router)
+When there is no Wi-Fi router or internet available, your laptop becomes the Wi-Fi hotspot and server:
+```bash
+./hotspot.sh start
+```
+* **SSID**: `Restaurant-POS`
+* **Password**: `restaurant123`
+* **Website URL**: `http://10.42.0.1` (Static IP across all reboots)
+* Shows terminal QR code to connect to the Wi-Fi and another QR code to open the site.
+* Check status: `./hotspot.sh status`
+* Stop hotspot & restore normal Wi-Fi: `./hotspot.sh stop`
+
 ---
 
 ## 📚 Documentation & Specifications

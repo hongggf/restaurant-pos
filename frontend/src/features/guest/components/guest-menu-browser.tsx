@@ -37,7 +37,7 @@ function PromoPopup() {
   const [showPromo, setShowPromo] = useState(false)
 
   useEffect(() => {
-    if (promo?.active && promo.id) {
+    if (promo?.active && promo.id && promo.imageUrl?.trim()) {
       try {
         const sessionKey = `promo_dismissed_${promo.id}`
         if (!sessionStorage.getItem(sessionKey)) {
@@ -47,9 +47,9 @@ function PromoPopup() {
         setShowPromo(true)
       }
     }
-  }, [promo?.id, promo?.active])
+  }, [promo?.id, promo?.active, promo?.imageUrl])
 
-  if (!promo || !promo.active || !showPromo) return null
+  if (!promo || !promo.active || !showPromo || !promo.imageUrl?.trim()) return null
 
   const handleDismiss = () => {
     if (promo?.id) {
